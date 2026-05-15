@@ -9,7 +9,9 @@ public class Cell {
     private boolean isCheck;
     private int x,y;
     //private Color baseColor;
-    public void setPiece(){
+    public void setPiece( Piece piece){
+        this.piece = piece;
+        updateSprite();
 
     }
      public void select(){
@@ -68,6 +70,7 @@ public class Cell {
 
     }
     public void updateSprite(){
+        
         
 
     }
