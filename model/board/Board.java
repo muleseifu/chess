@@ -1,6 +1,5 @@
-import Chess.model.board.Cell;
+
 import java.util.List;
-import Chess.model.pieces.Piece;  
 public class Board{
     private Cell[][] cells= new  Cell[8][8];
     private List<Piece> whitePieces;
@@ -35,9 +34,33 @@ public class Board{
     public boolean isCheckmate(int color){
         return false;
     }
-    public boolean isStalemate(int color){
-        return false;
-    }   
+    public boolean isStalemate(int color) {
+    // Check if the player is NOT in check
+    if (isInCheck(color)) {
+        return false;  // Can't be stalemate if in check
+    }
+    
+    // Check if the player has any legal moves
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Cell cell = getCell(i, j);
+            pieces piece = cell.getPiece();
+            
+            // Check only pieces of the current player
+            if (piece != null && piece.getColor() == color) {
+                // Get all legal moves for this piece
+                List<Cell> legalMoves = getLegalMoves(cell);
+                
+                if (legalMoves != null && !legalMoves.isEmpty()) {
+                    return false;  // Found at least one legal move
+                }
+            }
+        }
+    }
+    
+    // No legal moves found and not in check = stalemate
+    return true;
+    }
     public Board clone(){
         return this;
     }
