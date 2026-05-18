@@ -1,5 +1,6 @@
 package Chess.model.board;
 import javax.swing.*;
+import javax.swing.ImageIcon;
 import Chess.model.pieces.Piece;
 public class Cell {
     private boolean isPossibleDestination;
@@ -70,9 +71,15 @@ public class Cell {
 
     }
     public void updateSprite(){
-        
-        
-
+        if(piece == null){
+            content.setIcon(null);
+        } else {
+            String imagePath = piece.getPath();
+            if(imagePath != null && !imagePath.isEmpty()){
+                ImageIcon icon = new ImageIcon(imagePath);
+                content.setIcon(icon);
+            }
+        }
     }
     public boolean isInCheck(int color) {
         // Find the king of the given color
