@@ -9,9 +9,9 @@ public class Knight extends Piece{
         super(color, id, imagePath);
     }
     public List<Cell> move(Cell pos,Board board){
-
+    return;
     }
     public Piece getCopy(){
-
+    return ;
     }
 }
