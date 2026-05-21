@@ -1,131 +1,129 @@
 package Chess.model.board;
+import Chess.model.pieces.*;
 import javax.swing.*;
-import javax.swing.ImageIcon;
-import Chess.model.pieces.Piece;
+import java.awt.*;
+ 
 public class Cell {
+ 
     private boolean isPossibleDestination;
     private JLabel content;
     private Piece piece;
     private boolean isSelected;
     private boolean isCheck;
-    private int x,y;
-    //private Color baseColor;
-    public void setPiece( Piece piece){
+    private int x;
+    private int y;
+    private Color baseColor;
+ 
+    public Cell(int x, int y, Color baseColor) {
+        this.x = x;
+        this.y = y;
+        this.baseColor = baseColor;
+        this.piece = null;
+        this.isSelected = false;
+        this.isCheck = false;
+        this.isPossibleDestination = false;
+        this.content = new JLabel();
+        this.content.setHorizontalAlignment(SwingConstants.CENTER);
+        this.content.setVerticalAlignment(SwingConstants.CENTER);
+    }
+ 
+    public void setPiece(Piece piece) {
         this.piece = piece;
         updateSprite();
-
     }
-     public void select(){
-        this.isSelected = true;
-
-    }
-     public void deselect(){
-        this.isSelected = false;
-
-    }
-     public boolean  isSelected(){
-        return isSelected;
-
-    }
-     public void removePiece(){
+ 
+    public void removePiece() {
         this.piece = null;
-
+        updateSprite();
     }
-    public Piece getPiece(){
+ 
+    public Piece getPiece() {
         return piece;
     }
-    public void setPossibleDestination(){
+ 
+    public void select() {
+        this.isSelected = true;
+        content.setBackground(new Color(186, 202, 68));
+        content.setOpaque(true);
+    }
+ 
+    public void deselect() {
+        this.isSelected = false;
+        content.setBackground(baseColor);
+        content.setOpaque(true);
+    }
+ 
+    public boolean isSelected() {
+        return isSelected;
+    }
+ 
+    public void setPossibleDestination() {
         this.isPossibleDestination = true;
-        
+        // Show a dot indicator overlay (green tint)
+        content.setBorder(BorderFactory.createLineBorder(new Color(0, 200, 0), 3));
     }
-    public void removePossibleDestination(){
+ 
+    public void removePossibleDestination() {
         this.isPossibleDestination = false;
-        
+        content.setBorder(null);
     }
-    public boolean isPossibleDestination(){
+ 
+    public boolean isPossibleDestination() {
         return isPossibleDestination;
     }
-    public void setCheck(){
+ 
+    public void setCheck() {
         this.isCheck = true;
-        
+        content.setBackground(new Color(220, 50, 50));
+        content.setOpaque(true);
     }
-    public void removeCheck(){
+ 
+    public void removeCheck() {
         this.isCheck = false;
+        content.setBackground(baseColor);
+        content.setOpaque(true);
     }
-    public boolean isCheck(){
+ 
+    public boolean isCheck() {
         return isCheck;
     }
-    public int getX(){
+ 
+    public int getX() {
         return x;
     }
-    public int getY(){
+ 
+    public int getY() {
         return y;
     }
-    public boolean isEmpty(){
+ 
+    public boolean isEmpty() {
         return piece == null;
     }
-    public boolean isEnemy(int color){
-        if(piece == null) return false;
+ 
+    public boolean isEnemy(int color) {
+        if (piece == null) return false;
         return piece.getColor() != color;
-        
-
     }
-    public void updateSprite(){
-        if(piece == null){
-            content.setIcon(null);
+ 
+    public void updateSprite() {
+        if (piece != null && piece.getPath() != null) {
+            ImageIcon icon = new ImageIcon(piece.getPath());
+            Image scaled = icon.getImage().getScaledInstance(
+                    content.getWidth() > 0 ? content.getWidth() - 10 : 60,
+                    content.getHeight() > 0 ? content.getHeight() - 10 : 60,
+                    Image.SCALE_SMOOTH
+            );
+            content.setIcon(new ImageIcon(scaled));
         } else {
-            String imagePath = piece.getPath();
-            if(imagePath != null && !imagePath.isEmpty()){
-                ImageIcon icon = new ImageIcon(imagePath);
-                content.setIcon(icon);
-            }
+            content.setIcon(null);
         }
     }
-    public boolean isInCheck(int color) {
-        // Find the king of the given color
-        Piece king = null;
-        Cell kingCell = null;
-        
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Cell cell = getCell(i, j);
-                Piece piece = cell.getPiece();
-                
-                // Find the king of the specified color
-                if (piece != null && piece.getColor() == color && piece.getId().contains("King")) {
-                    king = piece;
-                    kingCell = cell;
-                    break;
-                }
-            }
-            if (king != null) break;
-        }
-        
-        // If no king found, return false (shouldn't happen in normal game)
-        if (kingCell == null) {
-            return false;
-        }
-        
-        // Check if any opponent piece can attack the king
-        int opponentColor = 1 - color; // 0 -> 1, 1 -> 0
-        
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Cell cell = getCell(i, j);
-                Piece piece = cell.getPiece();
-                
-                // Check only opponent pieces that are still available
-                if (piece != null && piece.getColor() == opponentColor && piece.isAvailable()) {
-                    List<Cell> attackCells = piece.move(cell, this);
-                    
-                    // If the king's cell is in the list of cells this piece can attack
-                    if (attackCells != null && attackCells.contains(kingCell)) {
-                        return true; // King is under attack
-                    }
-                }
-            }
-        }
-        
-        return false; // No opponent piece can attack the king
+ 
+    public JLabel getContent() {
+        return content;
+    }
+ 
+    public Color getBaseColor() {
+        return baseColor;
     }
 }
