@@ -1,6 +1,6 @@
 package Chess.gui;
- 
-public interface BoardListener {
+
+public interface  BoardListener {
     void onBoardChanged();
+    
 }
- 
