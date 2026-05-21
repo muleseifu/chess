@@ -62,6 +62,11 @@ public class Knight extends Piece {
     @Override
     public Piece getCopy() {
 
-        return new Knight(this.id, this.color, this.imagePath);
+        Knight copy = new Knight(this.id, this.color, this.imagePath)
+
+        copy.availability = this.availability;
+        copy.hasMoved = this.hasMoved;
+
+        return copy;
     }
 }

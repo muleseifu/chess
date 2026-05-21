@@ -71,6 +71,10 @@ public class Bishop extends Piece {
     @Override
     public Piece getCopy() {
 
-        return new Bishop(this.id, this.color, this.imagePath);
+        Bishop copy = new Bishop(this.id, this.color, this.imagePath);
+        copy.availability = this.availability;
+        copy.hasMoved = this.hasMoved;
+
+        return copy;
     }
 }

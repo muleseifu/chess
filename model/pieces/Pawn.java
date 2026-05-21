@@ -151,6 +151,8 @@ public class Pawn extends Piece {
         Pawn copy = new Pawn(this.id, this.color, this.imagePath);
 
         copy.enPassantVulnerable = this.enPassantVulnerable;
+        copy.availability = this.availability;
+        copy.hasMoved = this.hasMoved;
 
         return copy;
     }
