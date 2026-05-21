@@ -5,8 +5,8 @@ import Chess.model.board.Cell;
 import java.util.List;
 import java.util.ArrayList;
 public class Bishop extends Piece {
-    public Bishop(int color, String id, String imagePath) {
-        super(color, id, imagePath);
+    public Bishop(String id, int color, String imagePath) {
+        super(id, color, imagePath);
     }
     @override
     public List<Cell> move(Cell pos,Board board){
