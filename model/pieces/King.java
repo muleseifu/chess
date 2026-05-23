@@ -7,7 +7,7 @@ import java.util.List;
 public class King extends Piece {
     int x=pos.getX();
     int y=pos.getY();
-    public Kight(int color,String id,String imagePath){
+    public Kight(int color,String id,String imagePath) {
         super(color,id,imagePath);
     }
     @Override
