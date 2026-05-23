@@ -7,6 +7,11 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
 
+    public Knight(int color){
+        super();
+        this.color = color;
+        }
+
     public Knight(String id, int color, String imagePath) {
         super(id, color, imagePath);
     }
@@ -62,7 +67,7 @@ public class Knight extends Piece {
     @Override
     public Piece getCopy() {
 
-        Knight copy = new Knight(this.id, this.color, this.imagePath)
+        Knight copy = new Knight(this.id, this.color, this.imagePath);
 
         copy.availability = this.availability;
         copy.hasMoved = this.hasMoved;
