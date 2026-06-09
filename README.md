@@ -1,204 +1,111 @@
-# ♟️ Chess Game — ByteKnights
+# Chess OOP — Full Java Implementation
 
-> A fully-featured two-player chess application with an AI opponent, built in Java using Swing/JavaFX.
-
-![Java](https://img.shields.io/badge/Java-17%2B-orange?logo=java)
-![OOP](https://img.shields.io/badge/Course-Object--Oriented%20Programming-blue)
-![Year](https://img.shields.io/badge/Year-2024-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-green)
+A complete chess game rebuilt from scratch to showcase every major OOP concept
+taught in a Java OOP course.
 
 ---
 
-## 👥 Team
+## How to Compile & Run
 
-**Group:** ByteKnights &nbsp;|&nbsp; **Course:** Object-Oriented Programming 2024 &nbsp;|&nbsp; **Instructor:** Hailemelekot D.
+```bash
+# From the project root (where /src lives):
+javac -d out $(find src -name "*.java")
+java  -cp out chess.Main
+```
 
-| # | Name | Student ID  |
-|---|------|------------|
-| 1 | Abere Chanie | UGR/0121/17 |
-| 2 | Muluken Seifu | UGR/7376/17 |
-| 3 | Siyane Solomon | UGR/5908/17 |
-| 4 | Yomiyu Adisu | UGR/0197/17 |
-
----
-
-## 📖 Overview
-
-This project implements a complete chess game following standard chess rules. It supports two modes — **Player vs Player** and **Player vs Bot** — with an AI engine powered by Minimax with Alpha-Beta pruning. The architecture strictly follows object-oriented principles: inheritance, encapsulation, separation of concerns, and the Observer pattern.
+Requires **Java 11+**. No external libraries.
 
 ---
 
-## ✨ Features
-
-- ♟️ Full chess rules — castling, en passant, pawn promotion, check/checkmate/stalemate detection
-- 🤖 AI opponent with three difficulty levels (Easy / Medium / Hard)
-- 🔄 Undo/redo move history with algebraic notation display
-- 🎨 Multiple board themes (Classic / Wood / Dark)
-- ⏱️ Optional game clock with configurable time per player
-- 🔊 Sound effects for moves and captures
-- 🏳️ Resign and draw offer support
-
----
-
-## 🏗️ Architecture
-
-The project is organized into five packages:
+## Package & Class Map
 
 ```
 chess/
+├── Main.java                          Entry point
+│
 ├── model/
-│   ├── pieces/     # Piece hierarchy — abstract Piece + 6 concrete classes
-│   └── board/      # Cell, Board, move logic
-├── model/game/     # Game, GameState, turn management
-├── ai/             # Bot — Minimax with Alpha-Beta pruning
-├── gui/            # All Swing/JavaFX panels and dialogs
-└── util/           # Constants, MoveHistory, MoveRecord
-```
-
-### Class Hierarchy
-
-```
-Piece (abstract)
-├── Rook
-├── Bishop
-├── Knight
-├── Pawn
-├── Queen
-└── King
-```
-
-### Key Design Patterns
-
-| Pattern | Where used |
-|---------|-----------|
-| **Inheritance** | All pieces extend the abstract `Piece` base class |
-| **Observer** | `Board` notifies `GamePanel` via `BoardListener` on every state change |
-| **Strategy** | `Bot` uses a pluggable `BoardEvaluator` for heuristic scoring |
-| **Command** | `MoveRecord` captures full move state for undo/redo |
-
----
-
-## 🖥️ GUI Flow
-
-```
-Application Launch
-       │
-  Main Menu Panel
-       │
-     Mode?
-    /      \
- PvP        PvB (select difficulty)
-    \      /
-   Game Panel
-  (Board + Side + Controls)
-       │
-   Game Over?
-   /        \
- Yes          No → Continue Playing
-   │
-Result Dialog (Win / Draw / Resign)
-   │
-Play Again?
- /       \
-Yes       No → Main Menu
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Java 17 or higher
-- A Java IDE (IntelliJ IDEA, Eclipse, or VS Code with Java Extension Pack)
-
-### Clone & Run
-
-```bash
-git clone https://github.com/muleseifu/Chess.git
-cd Chess
-```
-
-**Compile:**
-```bash
-javac -sourcepath src -d out src/chess/Main.java
-```
-
-**Run:**
-```bash
-java -cp out chess.Main
-```
-
-Or simply open the project in your IDE and run `Main.java`.
-
----
-
-## 🎮 How to Play
-
-1. Launch the application — the **Main Menu** appears.
-2. Choose **Play vs Person** for two human players, or **Play vs Bot** and select a difficulty.
-3. Click a piece to select it — legal moves are highlighted on the board.
-4. Click a highlighted square to move.
-5. Special moves (castling, en passant, pawn promotion) are handled automatically.
-6. Use the **Control Panel** to undo, resign, offer a draw, or return to the menu.
-
----
-
-## 🤖 AI Engine
-
-The `Bot` class (in `chess.ai`) uses **Minimax with Alpha-Beta pruning**:
-
-| Difficulty | Search Depth |
-|------------|-------------|
-| Easy | 1 ply |
-| Medium | 3 ply |
-| Hard | 5 ply |
-
-The evaluation function scores positions based on material balance, piece-square position tables, and mobility. The bot always auto-promotes pawns to Queen.
-
----
-
-## ♟️ Special Rules
-
-**Castling** — Available when neither the king nor rook has moved, the path between them is clear, and the king is not in check or passing through an attacked square.
-
-**En Passant** — A pawn that advances two squares sets an `enPassantVulnerable` flag for exactly one turn, allowing adjacent enemy pawns to capture diagonally.
-
-**Pawn Promotion** — When a pawn reaches the opposite back rank, a dialog lets the player choose Queen, Rook, Bishop, or Knight.
-
-**Check Detection** — After every move, `Board.isInCheck()` tests whether any enemy piece's move list includes the king's cell. Moves that leave the own king in check are filtered out before being offered as legal moves.
-
----
-
-## 📁 Project Structure
-
-```
-Chess/
-├── src/
-│   └── chess/
-│       ├── Main.java
-│       ├── model/
-│       │   ├── pieces/         # Piece.java, Rook.java, Bishop.java, ...
-│       │   └── board/          # Cell.java, Board.java
-│       ├── model/game/         # Game.java, GameMode.java, GameStatus.java
-│       ├── ai/                 # Bot.java, BoardEvaluator.java
-│       ├── gui/                # MainMenuPanel.java, GamePanel.java, ...
-│       └── util/               # MoveHistory.java, MoveRecord.java, Constants.java
-├── resources/
-│   └── images/                 # Piece sprites (PNG)
-├── docs/
-│   └── Chess_Design_Document.pdf
-└── README.md
+│   ├── PieceColor.java                Enum  – WHITE / BLACK
+│   ├── PieceType.java                 Enum  – piece types + material values
+│   ├── Position.java                  Immutable value object (row, col)
+│   ├── Move.java                      Immutable value object – all move types
+│   │
+│   ├── pieces/
+│   │   ├── Piece.java                 Abstract base – Template Method pattern
+│   │   ├── Pawn.java                  Forward moves, double push, en passant, promotion
+│   │   ├── Knight.java                L-shape jumper
+│   │   ├── Bishop.java                Diagonal slider
+│   │   ├── Rook.java                  Orthogonal slider
+│   │   ├── Queen.java                 Diagonal + orthogonal slider
+│   │   ├── King.java                  Single-step + castling
+│   │   └── PieceFactory.java          Factory pattern for piece creation
+│   │
+│   ├── board/
+│   │   ├── ChessBoard.java            Interface – read-only view for move generators
+│   │   ├── Board.java                 Central mutable game state
+│   │   ├── BoardSetup.java            Separates initial placement (SRP)
+│   │   ├── MoveExecutor.java          Applies a move to the squares array (SRP)
+│   │   ├── MoveValidator.java         Filters pseudo-legal → legal (SRP)
+│   │   ├── CastlingRights.java        Tracks castling availability
+│   │   └── PositionTables.java        Piece-square tables for evaluation
+│   │
+│   └── state/
+│       └── GameState.java             Enum – PLAYING / CHECK / CHECKMATE / STALEMATE / DRAW
+│
+├── ai/
+│   ├── ChessAI.java                   Facade – async AI wrapper
+│   │
+│   ├── strategy/
+│   │   ├── AIStrategy.java            Strategy interface
+│   │   ├── RandomStrategy.java        Easy – prefers captures randomly
+│   │   ├── MinimaxStrategy.java       Medium/Hard – minimax + alpha-beta
+│   │   └── AIStrategyFactory.java     Factory – creates strategy by difficulty
+│   │
+│   └── evaluation/
+│       ├── BoardEvaluator.java        Strategy interface for evaluation
+│       ├── MaterialAndPositionalEvaluator.java  Material + PST evaluation
+│       └── MoveScorer.java            MVV-LVA move ordering for alpha-beta
+│
+├── core/
+│   ├── GameController.java            Application controller – Facade + Observer
+│   └── GameEventListener.java         Observer interface for UI ↔ model decoupling
+│
+└── ui/
+    ├── ChessWindow.java               Main JFrame – implements GameEventListener
+    │
+    ├── panels/
+    │   ├── BoardPanel.java            Swing board panel – delegates to BoardRenderer
+    │   ├── StatusPanel.java           Turn info, game state, move history
+    │   └── ControlPanel.java          New game, flip board, difficulty selectors
+    │
+    ├── dialogs/
+    │   ├── PromotionDialog.java       Modal piece-picker for pawn promotion
+    │   └── GameOverDialog.java        Modal end-game result + play again
+    │
+    └── renderer/
+        ├── BoardRenderer.java         Orchestrates all board painting
+        ├── SquareRenderer.java        Draws individual squares + highlights
+        ├── PieceRenderer.java         Draws Unicode chess symbols
+        └── ColorTheme.java            Central color constants
 ```
 
 ---
 
-## 📄 Documentation
+## OOP Concepts Demonstrated
 
-The full system design document — including UML class diagrams, method specifications, interaction sequences, and component architecture — is available in [`docs/Chess_Design_Document.pdf`](docs/Chess_Design_Document.pdf).
-
----
-
-## 📜 License
-
-This project was created for academic purposes as part of the **Object-Oriented Programming** course (2024). Feel free to use it for learning.
+| Concept | Where |
+|---|---|
+| **Abstraction** | `Piece` abstract class; `AIStrategy`, `BoardEvaluator`, `ChessBoard`, `GameEventListener` interfaces |
+| **Inheritance** | `Pawn`, `Knight`, `Bishop`, `Rook`, `Queen`, `King` all extend `Piece` |
+| **Polymorphism** | `board.getPieceAt(pos).generatePseudoLegalMoves(…)` — called the same way for every piece type |
+| **Encapsulation** | All fields private; state mutated only through explicit methods |
+| **Template Method** | `Piece.addSlidingMoves()` / `addStepMove()` used by subclasses |
+| **Factory** | `PieceFactory`, `AIStrategyFactory` |
+| **Strategy** | `AIStrategy` + `BoardEvaluator` — swappable at runtime |
+| **Observer** | `GameEventListener` — controller notifies UI without knowing Swing |
+| **Facade** | `GameController` (single entry point for all game actions), `ChessAI` |
+| **Value Object** | `Position`, `Move` — immutable, `equals`/`hashCode` defined |
+| **Interface segregation** | `ChessBoard` read-only interface used by piece move generators |
+| **SRP** | `BoardSetup`, `MoveExecutor`, `MoveValidator` each do one thing |
+| **Enums with behaviour** | `PieceType.getMaterialValue()`, `PieceColor.opposite()`, `GameState.isOver()` |
+| **Copy constructor** | `Board(Board)`, `CastlingRights(CastlingRights)`, every `Piece` subclass |
+| **Generics + Lambdas** | `Consumer<Move>` callback in `ChessAI`, stream in `GameController` |
